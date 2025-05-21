@@ -64,10 +64,12 @@ class EmbeddingIT extends AbstractIT {
 	}
 
 	@Test
-	void embeddingBatchDocuments() throws Exception {
+	void embeddingBatchDocuments() {
 		assertThat(this.embeddingModel).isNotNull();
 		List<float[]> embeddings = this.embeddingModel.embed(
-				List.of(new Document("Hello world"), new Document("Hello Spring"), new Document("Hello Spring AI!")),
+				List.of(new Document("Hello world"),
+						new Document("Hello Spring"),
+						new Document("Hello Spring AI!")),
 				OpenAiEmbeddingOptions.builder().model(OpenAiApi.DEFAULT_EMBEDDING_MODEL).build(),
 				new TokenCountBatchingStrategy());
 		assertThat(embeddings.size()).isEqualTo(3);
@@ -79,11 +81,13 @@ class EmbeddingIT extends AbstractIT {
 		assertThat(this.embeddingModel).isNotNull();
 		String contentAsString = this.resource.getContentAsString(StandardCharsets.UTF_8);
 		assertThatThrownBy(
-				() -> this.embeddingModel.embed(List.of(new Document("Hello World"), new Document(contentAsString)),
+				() -> this.embeddingModel.embed(List.of(new Document("Hello World"),
+								new Document(contentAsString)),
 						OpenAiEmbeddingOptions.builder().model(OpenAiApi.DEFAULT_EMBEDDING_MODEL).build(),
 						new TokenCountBatchingStrategy()))
 			.isInstanceOf(IllegalArgumentException.class);
 	}
+
 
 	@Test
 	void embedding3Large() {
